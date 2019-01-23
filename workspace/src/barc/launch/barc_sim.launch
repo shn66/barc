@@ -2,13 +2,17 @@
 
     <!-- SYSTEM MODEL -->
     <!-- vehicle parameters -->
-    <param name="L_a" type="double" value="0.125" />
-    <param name="L_b" type="double" value="0.125" />
-    <param name="m" type="double" value="1.98" />
-    <param name="I_z" type="double" value="0.03" />
+    <!-- <param name="L_a" type="double" value="0.125" /> -->
+    <!-- <param name="L_b" type="double" value="0.125" /> -->
+    <!-- <param name="m" type="double" value="1.98" /> -->
+    <!-- <param name="I_z" type="double" value="0.03" /> -->
+    <param name="L_a" type="double" value="1.52" />
+    <param name="L_b" type="double" value="1.5" />
+    <param name="m" type="double" value="2303.0" />
+    <param name="I_z" type="double" value="5520.0" />
         
     <!-- Track parameters -->
-    <param name="trackShape" type="str" value="L_shape" />
+    <param name="trackShape" type="str" value="RFS" />
     <!-- <param name="trackShape" type="str" value="3110_big" /> -->
     <!-- <param name="trackShape" type="str" value="oval" /> -->
 
@@ -31,9 +35,14 @@
         <param name="c_f" type="double" value="0.05" />
         <param name="dt" type="double" value="0.01" />
         <!-- Tire model parameters -->
-        <param name="B" type="double" value="6.0" />
-        <param name="C" type="double" value="1.6" />
-        <param name="mu" type="double" value="0.8" />
+        <!--<param name="B" type="double" value="6.0" />-->
+        <!--<param name="C" type="double" value="1.6" />-->
+        <!--<param name="mu" type="double" value="0.8" />-->
+        <!--<param name="g" type="double" value="9.81" />-->
+        <param name="B" type="double" value="1.0" />
+        <param name="C_f" type="double" value="200000.0" />
+        <param name="C_r" type="double" value="250000.0" />
+        <param name="mu" type="double" value="1.0" />
         <param name="g" type="double" value="9.81" />
         <!-- simulator sensor noise -->
         <!-- <param name="n_bound" type="double" value="0.5" />

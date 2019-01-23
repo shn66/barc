@@ -142,7 +142,8 @@ class Simulator(object):
 		self.c_f = rospy.get_param("simulator/c_f")
 
 		self.B = rospy.get_param("simulator/B")
-		self.C = rospy.get_param("simulator/C")
+		self.C_f = rospy.get_param("simulator/C_f")
+		self.C_r = rospy.get_param("simulator/C_r")
 		self.mu= rospy.get_param("simulator/mu")
 		self.g = rospy.get_param("simulator/g")
 
@@ -183,8 +184,12 @@ class Simulator(object):
 			a_F = arctan((self.vy + self.L_f*self.psiDot)/abs(self.vx)) - u[1]
 			a_R = arctan((self.vy - self.L_r*self.psiDot)/abs(self.vx))
 
-		FyF = -self.pacejka(a_F)
-		FyR = -self.pacejka(a_R)
+		Fzf = self.m*self.g*self.L_r/(self.L_r+self.L_f)
+		Fzr = self.m*self.g*self.L_f/(self.L_r+self.L_f)
+		#FyF = -self.pacejka(a_F,C_f)
+		#FyR = -self.pacejka(a_R,C_r)
+		FyF = self.fiala(self.C_f,self.mu, np.array([a_F]),Fzf)
+		FyR = self.fiala(self.C_r,self.mu, np.array([a_R]),Fzr)
 
 		self.slipF.append(a_F)
 		self.FyF.append(FyF)
@@ -215,10 +220,27 @@ class Simulator(object):
 
 		self.vx = abs(self.vx)
 	
-	def pacejka(self,ang):
+	def pacejka(self,ang,C):
 		D = self.mu*self.m*self.g/2
 		C_alpha_f = D*sin(self.C*arctan(self.B*ang))
 		return C_alpha_f
+
+	def fiala(self,C, mu, alpha, Fz):
+		muP=mu
+		muS=mu
+		alphaSlide = np.abs(np.arctan( 3*muP*Fz / C ))
+		Fy = np.zeros(alpha.size)
+	
+		for i in range(alpha.size):
+
+			#Use 3rd order polynomial equation when below the tire range
+			 if np.abs(alpha[i]) < alphaSlide:
+		 		Fy[i] = -C * np.tan(alpha[i]) + C**2 / (3 * muP * Fz) * (2 - muS / muP) * np.tan(alpha[i]) * np.abs(np.tan(alpha[i])) - C**3/(9*muP**2*Fz**2)*np.tan(alpha[i])**3*(1-(2*muS)/(3*muP)) 
+			 else :
+		#Use sliding force otherwise
+		 		Fy[i] = -muS * Fz * np.sign(alpha[i])
+
+		return Fy
 
 	def saveHistory(self):
 		self.x_his.append(self.x)

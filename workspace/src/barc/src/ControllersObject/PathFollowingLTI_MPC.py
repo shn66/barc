@@ -170,8 +170,8 @@ def _buildMatIneqConst(Controller):
     Fx = np.array([[0., 0., 0., 0., 0., 1.],
                    [0., 0., 0., 0., 0., -1.]])
 
-    bx = np.array([[2.],  # max ey
-                   [2.]])  # max ey
+    bx = np.array([[5.],  # max ey
+                   [5.]])  # max ey
 
     # Buil the matrices for the input constraint in each region. In the region i we want Fx[i]x <= bx[b]
     Fu = np.array([[1., 0.],
@@ -181,8 +181,8 @@ def _buildMatIneqConst(Controller):
 
     bu = np.array([[0.5],  # Max Steering
                    [0.5],  # Max Steering
-                   [1.],  # Max Acceleration
-                   [1.]])  # Max Acceleration
+                   [5.],  # Max Acceleration
+                   [10.]])  # Max Acceleration
 
     # Now stuck the constraint matrices to express them in the form Fz<=b. Note that z collects states and inputs
     # Let's start by computing the submatrix of F relates with the state

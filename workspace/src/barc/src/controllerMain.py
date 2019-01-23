@@ -67,7 +67,7 @@ def main():
 
     PickController = "LMPC"
     NumberOfLaps   = 50
-    vt = 1.2
+    vt = 9.5
     PathFollowingLaps = 2
     
     if mode == "simulations":
@@ -470,9 +470,9 @@ def ControllerInitialization(PickController, NumberOfLaps, dt, vt, map, mode, PI
         Controller = PID(vt, PIDnoise, mode)
                                         # PID controller
     elif PickController == "TI_MPC":
-        # file_data = open(homedir+'/barc_data/'+'/ClosedLoopDataPID.obj', 'rb')
+        file_data = open(homedir+'/barc_data/'+'/ClosedLoopDataPID.obj', 'rb')
         # file_data = open(homedir+'/barc_data/'+'/ClosedLoopDataPIDforLMPC.obj', 'rb')
-        file_data = open(homedir+'/barc_data/'+'/ClosedLoopDataPID_Exp.obj', 'rb')
+        # file_data = open(homedir+'/barc_data/'+'/ClosedLoopDataPID_Exp.obj', 'rb')
         ClosedLoopDataPID = pickle.load(file_data)
         file_data.close()     
         Controller = PathFollowingLTI_MPC(A, B, Q, R, N, vt, TI_Qlane)
@@ -505,14 +505,15 @@ def ControllerInitialization(PickController, NumberOfLaps, dt, vt, map, mode, PI
         numSS_it = 4                  # Number of trajectories used at each iteration to build the safe set
         # Tuning Parameters
         if mode == "simulations":
-            numSS_Points = 40#42 + N         # Number of points to select from each trajectory to build the safe set
-            N = 11
-            Qslack  =  2 * 5 * np.diag([10, 0.1, 1, 0.1, 10, 1])          # Cost on the slack variable for the terminal constraint
-            Qlane   = 0.1 * 0.5 * 10 * np.array([50, 10]) # Quadratic slack lane cost
+            print "Simulation Mode"
+            numSS_Points = 60#42 + N         # Number of points to select from each trajectory to build the safe set
+            N = 10
+            Qslack  =  5 * np.diag([ 1, 0.1, 1, 0.1, 10, 1])          # Cost on the slack variable for the terminal constraint
+            Qlane   =  np.array([50, 10]) # Quadratic slack lane cost
             Q_LMPC  =  0 * np.diag([0.0, 0.0, 10.0, 0.0, 0.0, 0.0])  # State cost x = [vx, vy, wz, epsi, s, ey]
             R_LMPC  =  0.0 * np.diag([1.0, 1.0])                      # Input cost u = [delta, a]
-            dR_LMPC =  2 * 0.5 * 2* 1 * np.array([ 5 * 0.5 * 10.0, 0.25 * 8 * 20.0]) # Input rate cost u
-            aConstr = np.array([0.7, 2.0]) # aConstr = [amin, amax]
+            dR_LMPC =  np.array([ 0.1, 1.0]) # Input rate cost u
+            aConstr = np.array([10.0, 10.0]) # aConstr = [amin, amax]
             steeringDelay = 0
             idDelay       = 0
         elif sel_car == "NewBARC":

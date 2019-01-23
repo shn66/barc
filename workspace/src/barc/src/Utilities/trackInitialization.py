@@ -33,6 +33,18 @@ class Map():
                              [60 * 0.03, +60 * 0.03 * 2 / np.pi],
                              [20 * 0.03, 0],
                              [60 * 0.03, +60 * 0.03 * 2 / np.pi]])
+
+        elif selectedTrack == "RFS":
+            self.slack = 0.15
+            self.halfWidth = 2.5
+            radius=1.0/0.059014
+            spec = np.array([[21.0, 0],
+                         [np.pi*radius, -radius],
+                         # Note s = 1 * np.pi / 2 and r = -1 ---> Angle spanned = np.pi / 2
+                         [41.0, 0],
+                         [np.pi*radius, -radius],
+                         [20.0,0]])
+
         elif selectedTrack == "3110_big":
             self.halfWidth = 0.4
             self.slack     = 0.45
